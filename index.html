@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plastic Decomposition Time Prediction</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Plastic Decomposition Time Prediction</h1>
+    <form id="prediction-form">
+        <label for="features">Enter Plastic Features:</label>
+        <input type="text" id="features" name="features" placeholder="Enter plastic features..." required>
+        <button type="submit">Predict</button>
+    </form>
+    <div id="prediction-result"></div>
+</body>
+<script>
+    $(document).ready(function() {
+        // Handle prediction form submission
+        $('#prediction-form').submit(function(event) {
+            event.preventDefault();
+            let form = $(this);
+            let formData = form.serializeArray();
+            let features = {};
+            
+            // Get the form data
+            $.each(formData, function(index, field) {
+                features[field.name] = field.value;
+            });
+
+            // Make API request to get predictions
+            $.ajax({
+                type: 'POST',
+                url: '/predict',
+                data: JSON.stringify({ 'features': features }),
+                contentType: 'application/json',
+                success: function(response) {
+                    // Display the predictions on the webpage
+                    $('#prediction-result').html('Decomposition Time Prediction: ' + response.predictions);
+                }
+            });
+        });
+    });
+</script>
+</html>
